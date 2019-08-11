@@ -33,7 +33,10 @@ function execSql(done, sql, requestCallback) {
   });
 
   connection.on('connect', function(err) {
-    assert.ifError(err);
+    if (err) {
+      return done(err);
+    }
+
     connection.execSqlBatch(request);
   });
 
@@ -120,13 +123,19 @@ describe('Errors Test', function() {
     const createProc = new Request(
       "create procedure #testExtendedErrorInfo as raiserror('test error message', 14, 42)",
       function(err) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
+
         connection.callProcedure(execProc);
       }
     );
 
     connection.on('connect', function(err) {
-      assert.ifError(err);
+      if (err) {
+        return done(err);
+      }
+
       connection.execSqlBatch(createProc);
     });
 
