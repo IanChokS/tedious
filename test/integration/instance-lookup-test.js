@@ -32,7 +32,10 @@ describe('Instance Lookup Test', function() {
     }
 
     new InstanceLookup().instanceLookup({ server: config.server, instanceName: config.instanceName }, function(err, port) {
-      assert.ifError(err);
+      if (err) {
+        return done(err);
+      }
+
       assert.ok(port);
 
       done();
