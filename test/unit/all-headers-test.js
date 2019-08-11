@@ -3,7 +3,7 @@ const WritableTrackingBuffer = require('../../src/tracking-buffer/writable-track
 const writeAllHeaders = require('../../src/all-headers').writeToTrackingBuffer;
 
 describe('all headers test', function() {
-  it('should write headers', function(done) {
+  it('should write headers', function() {
     const expected = Buffer.from([
       0x16,
       0x00,
@@ -43,7 +43,5 @@ describe('all headers test', function() {
     writeAllHeaders(buffer, transactionDescriptor, 1);
 
     assert.isOk(buffer.data.equals(expected));
-
-    done();
   });
 });
