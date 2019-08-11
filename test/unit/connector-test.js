@@ -27,30 +27,27 @@ function connectToIpTestImpl(hostIp, localIp, mitm, done) {
   });
 
   connector.execute(function(err, socket) {
-    assert.ifError(err);
+    if (err) {
+      return done(err);
+    }
 
     assert.strictEqual(socket, expectedSocket);
+
     done();
   });
 }
 
 describe('connector tests', function() {
   describe('Connector with MultiSubnetFailover', function() {
-    const mitm = new Mitm();
+    let mitm;
 
     beforeEach(function() {
+      mitm = new Mitm()
       mitm.enable();
     });
 
-
-    it('should setUp', function(done) {
-      mitm.enable();
-      done();
-    });
-
-    it('should tearDown', function(done) {
+    afterEach(function() {
       mitm.disable();
-      done();
     });
 
     it('should connects directly if given an IP v4 address', function(done) {
@@ -67,7 +64,9 @@ describe('connector tests', function() {
       const spy = sinon.spy(ParallelConnectionStrategy.prototype, 'connect');
 
       connector.execute(function(err, socket) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
 
         assert.strictEqual(spy.callCount, 1);
 
@@ -77,24 +76,19 @@ describe('connector tests', function() {
   });
 
   describe('Connector without MultiSubnetFailover', function() {
-    const mitm = new Mitm();
+    let mitm;
 
     beforeEach(function() {
+      mitm = new Mitm()
       mitm.enable();
     });
 
-
-    it('should setUp', function(done) {
-      mitm.enable();
-
-      done();
-    });
-
-    it('should tearDown', function(done) {
+    afterEach(function() {
       mitm.disable();
-      sinon.restore();
+    });
 
-      done();
+    afterEach(function() {
+      sinon.restore();
     });
 
     it('should connect directly if given an IP address', function(done) {
@@ -113,7 +107,9 @@ describe('connector tests', function() {
       });
 
       connector.execute(function(err, socket) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
 
         assert.strictEqual(socket, expectedSocket);
 
@@ -130,7 +126,9 @@ describe('connector tests', function() {
       );
 
       connector.execute(function(err, socket) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
 
         assert.strictEqual(spy.callCount, 1);
 
@@ -143,20 +141,12 @@ describe('connector tests', function() {
     let mitm;
 
     beforeEach(function() {
-      mitm = new Mitm();
+      mitm = new Mitm()
       mitm.enable();
     });
 
-    it('should setUp', function(done) {
-      mitm.enable();
-
-      done();
-    });
-
-    it('should tearDown', function(done) {
+    afterEach(function() {
       mitm.disable();
-
-      done();
     });
 
     it('should tries to connect to all addresses in sequence', function(done) {
@@ -192,7 +182,9 @@ describe('connector tests', function() {
       });
 
       strategy.connect(function(err) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
 
         assert.strictEqual(attemptedConnections.length, 3);
 
@@ -225,9 +217,7 @@ describe('connector tests', function() {
       let expectedSocket;
       mitm.on('connect', function(socket, opts) {
         if (opts.host !== '127.0.0.4') {
-          process.nextTick(() => {
-            socket.emit('error', new Error());
-          });
+          socket.destroy(new Error());
         } else {
           expectedSocket = socket;
         }
@@ -257,7 +247,9 @@ describe('connector tests', function() {
       });
 
       strategy.connect(function(err) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
 
         assert.strictEqual(attemptedConnections.length, 1);
 
@@ -315,7 +307,9 @@ describe('connector tests', function() {
       });
 
       strategy.connect(function(err, socket) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
 
         assert.isOk(attemptedSockets[0].destroyed);
         assert.isOk(attemptedSockets[1].destroyed);
@@ -330,20 +324,12 @@ describe('connector tests', function() {
     let mitm;
 
     beforeEach(function() {
-      mitm = new Mitm();
+      mitm = new Mitm()
       mitm.enable();
     });
 
-    it('should setUp', function(done) {
-      mitm.enable();
-
-      done();
-    });
-
-    it('should tearDown', function(done) {
+    afterEach(function() {
       mitm.disable();
-
-      done();
     });
 
     it('should tries to connect to all addresses in parallel', function(done) {
@@ -367,7 +353,9 @@ describe('connector tests', function() {
       });
 
       strategy.connect(function(err, socket) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
 
         assert.strictEqual(attemptedConnections[0].host, '127.0.0.2');
         assert.strictEqual(attemptedConnections[0].port, 12345);
@@ -430,6 +418,10 @@ describe('connector tests', function() {
       });
 
       strategy.connect(function(err, socket) {
+        if (err) {
+          return done(err);
+        }
+
         assert.strictEqual(expectedSocket, socket);
 
         done();
@@ -453,7 +445,9 @@ describe('connector tests', function() {
       });
 
       strategy.connect(function(err, socket) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
 
         assert.isOk(!attemptedSockets[0].destroyed);
         assert.isOk(attemptedSockets[1].destroyed);
@@ -465,41 +459,35 @@ describe('connector tests', function() {
   });
 
   describe('Test unicode SQL Server name', function() {
-    it('should setUp', function(done) {
+    let spy;
+
+    beforeEach(function() {
       // Spy the dns.lookup so we can verify if it receives punycode value for IDN Server names
-      const spy = sinon.spy(dns, 'lookup');
-      assert.isOk(spy);
-      done();
+      spy = sinon.spy(dns, 'lookup');
     });
 
-    it('should tearDown', function(done) {
+    afterEach(function() {
       sinon.restore();
-
-      done();
     });
 
-    it('should test IDN Server name', function(done) {
-      const spy = sinon.spy(dns, 'lookup');
+    it('should test IDN Server name', function() {
       const server = '本地主机.ad';
       const connector = new Connector({ host: server, port: 12345 }, true);
 
       connector.execute(() => { });
+
       assert.isOk(spy.called, 'Failed to call dns.lookup on hostname');
       assert.isOk(spy.calledWithMatch(punycode.toASCII(server)), 'Unexpcted hostname passed to dns.lookup');
-      sinon.restore();
-      done();
     });
 
-    it('should test ASCII Server name', function(done) {
-      const spy = sinon.spy(dns, 'lookup');
+    it('should test ASCII Server name', function() {
       const server = 'localhost';
       const connector = new Connector({ host: server, port: 12345 }, true);
 
       connector.execute(() => { });
+
       assert.isOk(spy.called, 'Failed to call dns.lookup on hostname');
       assert.isOk(spy.calledWithMatch(server), 'Unexpcted hostname passed to dns.lookup');
-      sinon.restore();
-      done();
     });
   });
 });
