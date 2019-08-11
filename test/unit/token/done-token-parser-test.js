@@ -20,7 +20,7 @@ function parse(status, curCmd, doneRowCount) {
 }
 
 describe('Done Token Parser', () => {
-  it('should done', (done) => {
+  it('should done', () => {
     const status = 0x0000;
     const curCmd = 1;
     const doneRowCount = 2;
@@ -30,11 +30,9 @@ describe('Done Token Parser', () => {
     assert.isOk(!token.more);
     assert.strictEqual(token.curCmd, curCmd);
     assert.isOk(!token.rowCount);
-
-    done();
   });
 
-  it('should more', (done) => {
+  it('should more', () => {
     const status = 0x0001;
     const curCmd = 1;
     const doneRowCount = 2;
@@ -44,11 +42,9 @@ describe('Done Token Parser', () => {
     assert.isOk(token.more);
     assert.strictEqual(token.curCmd, curCmd);
     assert.isOk(!token.rowCount);
-
-    done();
   });
 
-  it('should done row count', (done) => {
+  it('should done row count', () => {
     const status = 0x0010;
     const curCmd = 1;
     const doneRowCount = 0x1200000034;
@@ -58,7 +54,5 @@ describe('Done Token Parser', () => {
     assert.isOk(!token.more);
     assert.strictEqual(token.curCmd, 1);
     assert.strictEqual(token.rowCount, doneRowCount);
-
-    done();
   });
 });

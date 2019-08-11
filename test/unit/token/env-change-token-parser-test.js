@@ -3,7 +3,7 @@ const WritableTrackingBuffer = require('../../../src/tracking-buffer/writable-tr
 const assert = require('chai').assert;
 
 describe('Env Change Token Parser', () => {
-  it('should write to database', (done) => {
+  it('should write to database', () => {
     const oldDb = 'old';
     const newDb = 'new';
 
@@ -25,11 +25,9 @@ describe('Env Change Token Parser', () => {
     assert.strictEqual(token.type, 'DATABASE');
     assert.strictEqual(token.oldValue, 'old');
     assert.strictEqual(token.newValue, 'new');
-
-    done();
   });
 
-  it('should write with correct packet size', (done) => {
+  it('should write with correct packet size', () => {
     const oldSize = '1024';
     const newSize = '2048';
 
@@ -51,11 +49,9 @@ describe('Env Change Token Parser', () => {
     assert.strictEqual(token.type, 'PACKET_SIZE');
     assert.strictEqual(token.oldValue, 1024);
     assert.strictEqual(token.newValue, 2048);
-
-    done();
   });
 
-  it('should be of bad type', (done) => {
+  it('should be of bad type', () => {
     const buffer = new WritableTrackingBuffer(50, 'ucs2');
 
     buffer.writeUInt8(0xe3);
@@ -70,6 +66,5 @@ describe('Env Change Token Parser', () => {
     const token = parser.read();
 
     assert.strictEqual(token, null);
-    done();
   });
 });

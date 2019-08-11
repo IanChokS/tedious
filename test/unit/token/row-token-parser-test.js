@@ -16,7 +16,7 @@ const options = {
 };
 
 describe('Row Token Parser', () => {
-  it('should write int', (done) => {
+  it('should write int', () => {
     const colMetaData = [{ type: dataTypeByName.Int }];
     const value = 3;
 
@@ -31,11 +31,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write bigint', (done) => {
+  it('should write bigint', () => {
     const colMetaData = [
       { type: dataTypeByName.BigInt },
       { type: dataTypeByName.BigInt }
@@ -55,11 +53,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 2);
     assert.strictEqual('1', token.columns[0].value);
     assert.strictEqual('9223372036854775807', token.columns[1].value);
-
-    done();
   });
 
-  it('should write real', (done) => {
+  it('should write real', () => {
     const colMetaData = [{ type: dataTypeByName.Real }];
     const value = 9.5;
 
@@ -75,11 +71,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write float', (done) => {
+  it('should write float', () => {
     const colMetaData = [{ type: dataTypeByName.Float }];
     const value = 9.5;
 
@@ -97,11 +91,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write Money', (done) => {
+  it('should write Money', () => {
     const colMetaData = [
       { type: SmallMoney },
       { type: Money },
@@ -140,11 +132,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns[3].value, value);
     assert.strictEqual(token.columns[4].value, value);
     assert.strictEqual(token.columns[5].value, valueLarge);
-
-    done();
   });
 
-  it('should write varchar without code page', (done) => {
+  it('should write varchar without code page', () => {
     const colMetaData = [
       {
         type: dataTypeByName.VarChar,
@@ -168,11 +158,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write varchar with code page', (done) => {
+  it('should write varchar with code page', () => {
     const colMetaData = [
       {
         type: dataTypeByName.VarChar,
@@ -196,11 +184,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write nvarchar', (done) => {
+  it('should write nvarchar', () => {
     const colMetaData = [{ type: dataTypeByName.NVarChar }];
     const value = 'abc';
 
@@ -218,11 +204,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write varBinary', (done) => {
+  it('should write varBinary', () => {
     const colMetaData = [{ type: dataTypeByName.VarBinary }];
     const value = Buffer.from([0x12, 0x34]);
 
@@ -240,11 +224,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.deepEqual(token.columns[0].value, value);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write binary', (done) => {
+  it('should write binary', () => {
     const colMetaData = [{ type: dataTypeByName.Binary }];
     const value = Buffer.from([0x12, 0x34]);
 
@@ -262,11 +244,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.deepEqual(token.columns[0].value, value);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write varcharMaxNull', (done) => {
+  it('should write varcharMaxNull', () => {
     const colMetaData = [
       {
         type: dataTypeByName.VarChar,
@@ -292,11 +272,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, null);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write varcharMaxUnkownLength', (done) => {
+  it('should write varcharMaxUnkownLength', () => {
     const colMetaData = [
       {
         type: dataTypeByName.VarChar,
@@ -328,11 +306,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write varcharMaxKnownLength', (done) => {
+  it('should write varcharMaxKnownLength', () => {
     const colMetaData = [
       {
         type: dataTypeByName.VarChar,
@@ -362,11 +338,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write varcharmaxWithCodePage', (done) => {
+  it('should write varcharmaxWithCodePage', () => {
     const colMetaData = [
       {
         type: dataTypeByName.VarChar,
@@ -396,11 +370,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write varcharMaxKnownLengthWrong', (done) => {
+  it('should write varcharMaxKnownLengthWrong', () => {
     const colMetaData = [
       {
         type: dataTypeByName.VarChar,
@@ -425,11 +397,11 @@ describe('Row Token Parser', () => {
       parser.read();
       assert.isOk(false);
     } catch {
-      done();
+      // ???
     }
   });
 
-  it('should write varBinaryMaxNull', (done) => {
+  it('should write varBinaryMaxNull', () => {
     const colMetaData = [
       {
         type: dataTypeByName.VarBinary,
@@ -452,11 +424,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, null);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write varBinaryMaxUnknownLength', (done) => {
+  it('should write varBinaryMaxUnknownLength', () => {
     const colMetaData = [
       {
         type: dataTypeByName.VarBinary,
@@ -485,11 +455,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns.length, 1);
     assert.deepEqual(token.columns[0].value, value);
     assert.strictEqual(token.columns[0].metadata, colMetaData[0]);
-
-    done();
   });
 
-  it('should write intN', (done) => {
+  it('should write intN', () => {
     const colMetaData = [
       { type: IntN },
       { type: IntN },
@@ -631,11 +599,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual('100', token.columns[9].value);
     assert.strictEqual('1000', token.columns[10].value);
     assert.strictEqual('10000', token.columns[11].value);
-
-    done();
   });
 
-  it('should write guidN', (done) => {
+  it('should write guidN', () => {
     const colMetaData = [
       { type: dataTypeByName.UniqueIdentifier },
       { type: dataTypeByName.UniqueIdentifier }
@@ -678,11 +644,9 @@ describe('Row Token Parser', () => {
       '67452301-AB89-EFCD-0123-456789ABCDEF',
       token.columns[1].value
     );
-
-    done();
   });
 
-  it('should write floatN', (done) => {
+  it('should write floatN', () => {
     const colMetaData = [
       { type: FloatN },
       { type: FloatN },
@@ -721,11 +685,9 @@ describe('Row Token Parser', () => {
     assert.strictEqual(token.columns[0].value, null);
     assert.strictEqual(9.5, token.columns[1].value);
     assert.strictEqual(9.5, token.columns[2].value);
-
-    done();
   });
 
-  it('should write datetime', (done) => {
+  it('should write datetime', () => {
     const colMetaData = [{ type: dataTypeByName.DateTime }];
 
     const days = 2; // 3rd January 1900
@@ -759,11 +721,9 @@ describe('Row Token Parser', () => {
       token.columns[0].value.getTime(),
       new Date('January 3, 1900 00:00:45 GMT').getTime()
     );
-
-    done();
   });
 
-  it('should write datetimeN', (done) => {
+  it('should write datetimeN', () => {
     const colMetaData = [{ type: DateTimeN }];
 
     const buffer = new WritableTrackingBuffer(0, 'ucs2');
@@ -779,11 +739,9 @@ describe('Row Token Parser', () => {
 
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, null);
-
-    done();
   });
 
-  it('should write numeric4Bytes', (done) => {
+  it('should write numeric4Bytes', () => {
     const colMetaData = [
       {
         type: NumericN,
@@ -809,11 +767,9 @@ describe('Row Token Parser', () => {
 
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
-
-    done();
   });
 
-  it('should write numeric4BytesNegative', (done) => {
+  it('should write numeric4BytesNegative', () => {
     const colMetaData = [
       {
         type: NumericN,
@@ -839,11 +795,9 @@ describe('Row Token Parser', () => {
 
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
-
-    done();
   });
 
-  it('should write numeric8Bytes', (done) => {
+  it('should write numeric8Bytes', () => {
     const colMetaData = [
       {
         type: NumericN,
@@ -870,11 +824,9 @@ describe('Row Token Parser', () => {
 
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
-
-    done();
   });
 
-  it('should write numeric12Bytes', (done) => {
+  it('should write numeric12Bytes', () => {
     const colMetaData = [
       {
         type: NumericN,
@@ -902,11 +854,9 @@ describe('Row Token Parser', () => {
 
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
-
-    done();
   });
 
-  it('should write numeric16Bytes', (done) => {
+  it('should write numeric16Bytes', () => {
     const colMetaData = [
       {
         type: NumericN,
@@ -940,11 +890,9 @@ describe('Row Token Parser', () => {
 
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, value);
-
-    done();
   });
 
-  it('should write numericNull', (done) => {
+  it('should write numericNull', () => {
     const colMetaData = [
       {
         type: NumericN,
@@ -966,7 +914,5 @@ describe('Row Token Parser', () => {
 
     assert.strictEqual(token.columns.length, 1);
     assert.strictEqual(token.columns[0].value, null);
-
-    done();
   });
 });

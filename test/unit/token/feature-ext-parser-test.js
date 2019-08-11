@@ -3,7 +3,7 @@ const WritableTrackingBuffer = require('../../../src/tracking-buffer/writable-tr
 const assert = require('chai').assert;
 
 describe('Feature Ext Praser', () => {
-  it('should be fed authentication', (done) => {
+  it('should be fed authentication', () => {
     const buffer = new WritableTrackingBuffer(50, 'ucs2');
 
     buffer.writeUInt8(0xAE); // FEATUREEXTACK token header
@@ -28,7 +28,5 @@ describe('Feature Ext Praser', () => {
     const token = parser.read();
 
     assert.isOk(token.fedAuth.equals(Buffer.from('bc')));
-
-    done();
   });
 });

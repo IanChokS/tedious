@@ -3,7 +3,7 @@ const WritableTrackingBuffer = require('../../../src/tracking-buffer/writable-tr
 const assert = require('chai').assert;
 
 describe('Loginack Token Parser', () => {
-  it('should have correct info', (done) => {
+  it('should have correct info', () => {
     const interfaceType = 1;
     const version = 0x72090002;
     const progName = 'prog';
@@ -38,7 +38,5 @@ describe('Loginack Token Parser', () => {
     assert.strictEqual(token.tdsVersion, '7_2');
     assert.strictEqual(token.progName, progName);
     assert.deepEqual(token.progVersion, progVersion);
-
-    done();
   });
 });

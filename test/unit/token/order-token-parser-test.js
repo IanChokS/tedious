@@ -3,7 +3,7 @@ const WritableTrackingBuffer = require('../../../src/tracking-buffer/writable-tr
 const assert = require('chai').assert;
 
 describe('Order Token Parser', () => {
-  it('should have one column', (done) => {
+  it('should have one column', () => {
     const numberOfColumns = 1;
     const length = numberOfColumns * 2;
     const column = 3;
@@ -22,11 +22,9 @@ describe('Order Token Parser', () => {
 
     assert.strictEqual(token.orderColumns.length, 1);
     assert.strictEqual(token.orderColumns[0], column);
-
-    done();
   });
 
-  it('should have two columns', (done) => {
+  it('should have two columns', () => {
     const numberOfColumns = 2;
     const length = numberOfColumns * 2;
     const column1 = 3;
@@ -48,7 +46,5 @@ describe('Order Token Parser', () => {
     assert.strictEqual(token.orderColumns.length, 2);
     assert.strictEqual(token.orderColumns[0], column1);
     assert.strictEqual(token.orderColumns[1], column2);
-
-    done();
   });
 });

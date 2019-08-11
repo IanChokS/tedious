@@ -4,7 +4,7 @@ const TokenStreamParser = require('../../../src/token/stream-parser');
 const assert = require('chai').assert;
 
 describe('Colmetadata Token Parser', () => {
-  it('should int', (done) => {
+  it('should int', () => {
     const numberOfColumns = 1;
     const userType = 2;
     const flags = 3;
@@ -31,11 +31,9 @@ describe('Colmetadata Token Parser', () => {
     assert.strictEqual(token.columns[0].flags, 3);
     assert.strictEqual(token.columns[0].type.name, 'Int');
     assert.strictEqual(token.columns[0].colName, 'name');
-
-    done();
   });
 
-  it('should varchar', (done) => {
+  it('should varchar', () => {
     const numberOfColumns = 1;
     const userType = 2;
     const flags = 3;
@@ -72,7 +70,5 @@ describe('Colmetadata Token Parser', () => {
     assert.strictEqual(token.columns[0].collation.sortId, 0x9a);
     assert.strictEqual(token.columns[0].colName, 'name');
     assert.strictEqual(token.columns[0].dataLength, length);
-
-    done();
   });
 });

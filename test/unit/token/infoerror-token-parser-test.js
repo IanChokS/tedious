@@ -3,7 +3,7 @@ const WritableTrackingBuffer = require('../../../src/tracking-buffer/writable-tr
 const assert = require('chai').assert;
 
 describe('Infoerror token parser', () => {
-  it('should have correct info', (done) => {
+  it('should have correct info', () => {
     const number = 3;
     const state = 4;
     const class_ = 5;
@@ -38,7 +38,5 @@ describe('Infoerror token parser', () => {
     assert.strictEqual(token.serverName, serverName);
     assert.strictEqual(token.procName, procName);
     assert.strictEqual(token.lineNumber, lineNumber);
-
-    done();
   });
 });

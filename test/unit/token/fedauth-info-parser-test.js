@@ -3,7 +3,7 @@ const WritableTrackingBuffer = require('../../../src/tracking-buffer/writable-tr
 const assert = require('chai').assert;
 
 describe('Fedauth Info Parser', () => {
-  it('should contain fed auth info', (done) => {
+  it('should contain fed auth info', () => {
     const buffer = new WritableTrackingBuffer(50, 'ucs-2');
     buffer.writeUInt8('0xEE');
     buffer.writeUInt32LE(40);
@@ -23,7 +23,5 @@ describe('Fedauth Info Parser', () => {
 
     assert.strictEqual(token.stsurl, 'stsurl');
     assert.strictEqual(token.spn, 'spn');
-
-    done();
   });
 });

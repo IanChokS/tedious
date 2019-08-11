@@ -14,16 +14,14 @@ function assertBuffer(actual, expected) {
 }
 
 describe('Wrtiable Tracking Buffer', () => {
-  it('should create', (done) => {
+  it('should create', () => {
     const buffer = new TrackingBuffer(2);
 
     assert.isOk(buffer);
     assert.strictEqual(0, buffer.data.length);
-
-    done();
   });
 
-  it('should write unsigned int', (done) => {
+  it('should write unsigned int', () => {
     const buffer = new TrackingBuffer(20);
 
     buffer.writeUInt8(1);
@@ -56,11 +54,9 @@ describe('Wrtiable Tracking Buffer', () => {
       0x00,
       0x00
     ]);
-
-    done();
   });
 
-  it('should write signed int', (done) => {
+  it('should write signed int', () => {
     const buffer = new TrackingBuffer(2);
 
     buffer.writeInt8(-1);
@@ -93,41 +89,33 @@ describe('Wrtiable Tracking Buffer', () => {
       0xff,
       0xff
     ]);
-
-    done();
   });
 
-  it('should write string', (done) => {
+  it('should write string', () => {
     const buffer = new TrackingBuffer(2, 'ucs2');
 
     buffer.writeString('abc');
 
     assertBuffer(buffer, [0x61, 0x00, 0x62, 0x00, 0x63, 0x00]);
-
-    done();
   });
 
-  it('should write BVarChar', (done) => {
+  it('should write BVarChar', () => {
     const buffer = new TrackingBuffer(2, 'ucs2');
 
     buffer.writeBVarchar('abc');
 
     assertBuffer(buffer, [0x03, 0x61, 0x00, 0x62, 0x00, 0x63, 0x00]);
-
-    done();
   });
 
-  it('should write UsVarChar', (done) => {
+  it('should write UsVarChar', () => {
     const buffer = new TrackingBuffer(2, 'ucs2');
 
     buffer.writeUsVarchar('abc');
 
     assertBuffer(buffer, [0x03, 0x00, 0x61, 0x00, 0x62, 0x00, 0x63, 0x00]);
-
-    done();
   });
 
-  it('should copyFrom', (done) => {
+  it('should copyFrom', () => {
     const buffer = new TrackingBuffer(10);
     const source = Buffer.from([0x01, 0x02, 0x03, 0x04]);
 
@@ -135,7 +123,5 @@ describe('Wrtiable Tracking Buffer', () => {
     buffer.writeUInt8(5);
 
     assertBuffer(buffer, [0x01, 0x02, 0x03, 0x04, 0x05]);
-
-    done();
   });
 });

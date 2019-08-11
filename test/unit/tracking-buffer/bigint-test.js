@@ -14,16 +14,14 @@ function assertBuffer(actual, expected) {
 }
 
 describe('Bigint Test', () => {
-  it('should be zero', (done) => {
+  it('should be zero', () => {
     assert.strictEqual(
       '0',
       convertLEBytesToString(Buffer.from([0, 0, 0, 0, 0, 0, 0, 0]))
     );
-
-    done();
   });
 
-  it('should be small positive', (done) => {
+  it('should be small positive', () => {
     assert.strictEqual(
       '1',
       convertLEBytesToString(Buffer.from([1, 0, 0, 0, 0, 0, 0, 0]))
@@ -32,11 +30,9 @@ describe('Bigint Test', () => {
       '2',
       convertLEBytesToString(Buffer.from([2, 0, 0, 0, 0, 0, 0, 0]))
     );
-
-    done();
   });
 
-  it('should be small negative', (done) => {
+  it('should be small negative', () => {
     assert.strictEqual(
       '-1',
       convertLEBytesToString(Buffer.from([255, 255, 255, 255, 255, 255, 255, 255]))
@@ -45,29 +41,23 @@ describe('Bigint Test', () => {
       '-2',
       convertLEBytesToString(Buffer.from([254, 255, 255, 255, 255, 255, 255, 255]))
     );
-
-    done();
   });
 
-  it('should be big positive', (done) => {
+  it('should be big positive', () => {
     assert.strictEqual(
       '9223372036854775807',
       convertLEBytesToString(Buffer.from([255, 255, 255, 255, 255, 255, 255, 127]))
     );
-
-    done();
   });
 
-  it('should be big negative', (done) => {
+  it('should be big negative', () => {
     assert.strictEqual(
       '-9223372036854775808',
       convertLEBytesToString(Buffer.from([0, 0, 0, 0, 0, 0, 0, 128]))
     );
-
-    done();
   });
 
-  it('should be powersOf10', (done) => {
+  it('should be powersOf10', () => {
     assert.strictEqual(
       '10',
       convertLEBytesToString(Buffer.from([10, 0, 0, 0, 0, 0, 0, 0]))
@@ -84,11 +74,9 @@ describe('Bigint Test', () => {
       '10000',
       convertLEBytesToString(Buffer.from([16, 39, 0, 0, 0, 0, 0, 0]))
     );
-
-    done();
   });
 
-  it('should be toInt64LE', (done) => {
+  it('should be toInt64LE', () => {
     assertBuffer(numberToInt64LE(-3500000000), [
       0x00,
       0x3d,
@@ -179,7 +167,5 @@ describe('Bigint Test', () => {
       0xff,
       0xff
     ]);
-
-    done();
   });
 });

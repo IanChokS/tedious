@@ -3,7 +3,7 @@ const WriteBuffer = require('../../../src/tracking-buffer/writable-tracking-buff
 const assert = require('chai').assert;
 
 describe('sspi token parser', () => {
-  it('should parse challenge', (done) => {
+  it('should parse challenge', () => {
     const source = new WriteBuffer(68);
     source.writeUInt8(0xed);
     source.writeUInt16LE(0);
@@ -49,9 +49,5 @@ describe('sspi token parser', () => {
 
     // Skip token (first byte) and length of VarByte (2 bytes).
     assert.isOk(challenge.ntlmpacketBuffer.equals(data.slice(3)));
-
-    done();
   });
-
-
 });
