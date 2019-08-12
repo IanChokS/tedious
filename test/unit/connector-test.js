@@ -42,7 +42,7 @@ describe('connector tests', function() {
     let mitm;
 
     beforeEach(function() {
-      mitm = new Mitm()
+      mitm = new Mitm();
       mitm.enable();
     });
 
@@ -79,7 +79,7 @@ describe('connector tests', function() {
     let mitm;
 
     beforeEach(function() {
-      mitm = new Mitm()
+      mitm = new Mitm();
       mitm.enable();
     });
 
@@ -141,7 +141,7 @@ describe('connector tests', function() {
     let mitm;
 
     beforeEach(function() {
-      mitm = new Mitm()
+      mitm = new Mitm();
       mitm.enable();
     });
 
@@ -324,7 +324,7 @@ describe('connector tests', function() {
     let mitm;
 
     beforeEach(function() {
-      mitm = new Mitm()
+      mitm = new Mitm();
       mitm.enable();
     });
 
