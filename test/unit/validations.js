@@ -1,401 +1,355 @@
-var TYPE = require('../../src/data-type').typeByName;
+const TYPE = require('../../src/data-type').typeByName;
+const assert = require('chai').assert;
 
-exports.Bit = function(test) {
-  var value = TYPE.Bit.validate(null);
-  test.strictEqual(value, null);
+describe('Validations', function() {
+  it('Bit', () => {
+    let value = TYPE.Bit.validate(null);
+    assert.strictEqual(value, null);
 
-  value = TYPE.Bit.validate(true);
-  test.strictEqual(value, true);
+    value = TYPE.Bit.validate(true);
+    assert.strictEqual(value, true);
 
-  value = TYPE.Bit.validate('asdf');
-  test.strictEqual(value, true);
+    value = TYPE.Bit.validate('asdf');
+    assert.strictEqual(value, true);
 
-  value = TYPE.Bit.validate('');
-  test.strictEqual(value, false);
+    value = TYPE.Bit.validate('');
+    assert.strictEqual(value, false);
 
-  value = TYPE.Bit.validate(55);
-  test.strictEqual(value, true);
+    value = TYPE.Bit.validate(55);
+    assert.strictEqual(value, true);
 
-  value = TYPE.Bit.validate(0);
-  test.strictEqual(value, false);
+    value = TYPE.Bit.validate(0);
+    assert.strictEqual(value, false);
 
-  test.done();
-};
+  });
 
-exports.TinyInt = function(test) {
-  var value = TYPE.TinyInt.validate(null);
-  test.strictEqual(value, null);
+  it('TinyInt', () => {
+    let value = TYPE.TinyInt.validate(null);
+    assert.strictEqual(value, null);
 
-  value = TYPE.TinyInt.validate(15);
-  test.strictEqual(value, 15);
+    value = TYPE.TinyInt.validate(15);
+    assert.strictEqual(value, 15);
 
-  value = TYPE.TinyInt.validate('15');
-  test.strictEqual(value, 15);
+    value = TYPE.TinyInt.validate('15');
+    assert.strictEqual(value, 15);
 
-  value = TYPE.TinyInt.validate(256);
-  test.ok(value instanceof TypeError);
+    value = TYPE.TinyInt.validate(256);
+    assert.ok(value instanceof TypeError);
+  });
 
-  test.done();
-};
+  it('SmallInt', () => {
+    let value = TYPE.SmallInt.validate(null);
+    assert.strictEqual(value, null);
 
-exports.SmallInt = function(test) {
-  var value = TYPE.SmallInt.validate(null);
-  test.strictEqual(value, null);
+    value = TYPE.SmallInt.validate(-32768);
+    assert.strictEqual(value, -32768);
 
-  value = TYPE.SmallInt.validate(-32768);
-  test.strictEqual(value, -32768);
+    value = TYPE.SmallInt.validate(-32769);
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.SmallInt.validate(-32769);
-  test.ok(value instanceof TypeError);
+  it('Int', () => {
+    let value = TYPE.Int.validate(null);
+    assert.strictEqual(value, null);
 
-  test.done();
-};
+    value = TYPE.Int.validate(2147483647);
+    assert.strictEqual(value, 2147483647);
 
-exports.Int = function(test) {
-  var value = TYPE.Int.validate(null);
-  test.strictEqual(value, null);
+    value = TYPE.Int.validate(2147483648);
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.Int.validate(2147483647);
-  test.strictEqual(value, 2147483647);
+  it('BigInt', () => {
+    let value = TYPE.BigInt.validate(null);
+    assert.strictEqual(value, null);
 
-  value = TYPE.Int.validate(2147483648);
-  test.ok(value instanceof TypeError);
+    value = TYPE.BigInt.validate(2147483647);
+    assert.strictEqual(value, 2147483647);
 
-  test.done();
-};
+    value = TYPE.BigInt.validate(-9007199254740991);
+    assert.strictEqual(value, -9007199254740991);
 
-exports.BigInt = function(test) {
-  var value = TYPE.BigInt.validate(null);
-  test.strictEqual(value, null);
+    value = TYPE.BigInt.validate(9007199254740991);
+    assert.strictEqual(value, 9007199254740991);
 
-  value = TYPE.BigInt.validate(2147483647);
-  test.strictEqual(value, 2147483647);
+    value = TYPE.BigInt.validate(-9007199254740992);
+    assert.ok(value instanceof TypeError);
 
-  value = TYPE.BigInt.validate(-9007199254740991);
-  test.strictEqual(value, -9007199254740991);
+    value = TYPE.BigInt.validate(9007199254740992);
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.BigInt.validate(9007199254740991);
-  test.strictEqual(value, 9007199254740991);
+  it('SmallDateTime', () => {
+    let value = TYPE.SmallDateTime.validate(null);
+    assert.strictEqual(value, null);
 
-  value = TYPE.BigInt.validate(-9007199254740992);
-  test.ok(value instanceof TypeError);
+    let date = new Date();
+    value = TYPE.SmallDateTime.validate(date);
+    assert.strictEqual(+value, +date);
 
-  value = TYPE.BigInt.validate(9007199254740992);
-  test.ok(value instanceof TypeError);
+    value = TYPE.SmallDateTime.validate('2015-02-12T16:43:13.632Z');
+    assert.strictEqual(+value, 1423759393632);
 
-  test.done();
-};
+    value = TYPE.SmallDateTime.validate('xxx');
+    assert.ok(value instanceof TypeError);
+  });
 
-exports.SmallDateTime = function(test) {
-  var value = TYPE.SmallDateTime.validate(null);
-  test.strictEqual(value, null);
+  it('DateTime', () => {
+    let value = TYPE.DateTime.validate(null);
+    assert.strictEqual(value, null);
 
-  var date = new Date();
-  value = TYPE.SmallDateTime.validate(date);
-  test.strictEqual(+value, +date);
+    let date = new Date();
+    value = TYPE.DateTime.validate(date);
+    assert.strictEqual(+value, +date);
 
-  value = TYPE.SmallDateTime.validate('2015-02-12T16:43:13.632Z');
-  test.strictEqual(+value, 1423759393632);
+    value = TYPE.DateTime.validate('2015-02-12T16:43:13.632Z');
+    assert.strictEqual(+value, 1423759393632);
 
-  value = TYPE.SmallDateTime.validate('xxx');
-  test.ok(value instanceof TypeError);
+    value = TYPE.DateTime.validate('xxx');
+    assert.ok(value instanceof TypeError);
+  });
 
-  test.done();
-};
+  it('DateTime2', () => {
+    let value = TYPE.DateTime2.validate(null);
+    assert.strictEqual(value, null);
 
-exports.DateTime = function(test) {
-  var value = TYPE.DateTime.validate(null);
-  test.strictEqual(value, null);
+    let date = new Date();
+    value = TYPE.DateTime2.validate(date);
+    assert.strictEqual(+value, +date);
 
-  var date = new Date();
-  value = TYPE.DateTime.validate(date);
-  test.strictEqual(+value, +date);
+    value = TYPE.DateTime2.validate('2015-02-12T16:43:13.632Z');
+    assert.strictEqual(+value, 1423759393632);
 
-  value = TYPE.DateTime.validate('2015-02-12T16:43:13.632Z');
-  test.strictEqual(+value, 1423759393632);
+    value = TYPE.DateTime2.validate('xxx');
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.DateTime.validate('xxx');
-  test.ok(value instanceof TypeError);
+  it('Time', () => {
+    let value = TYPE.Time.validate(null);
+    assert.strictEqual(value, null);
 
-  test.done();
-};
+    let date = new Date();
+    value = TYPE.Time.validate(date);
+    assert.strictEqual(+value, +date);
 
-exports.DateTime2 = function(test) {
-  var value = TYPE.DateTime2.validate(null);
-  test.strictEqual(value, null);
+    value = TYPE.Time.validate('2015-02-12T16:43:13.632Z');
+    assert.strictEqual(+value, 1423759393632);
 
-  var date = new Date();
-  value = TYPE.DateTime2.validate(date);
-  test.strictEqual(+value, +date);
+    value = TYPE.Time.validate('xxx');
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.DateTime2.validate('2015-02-12T16:43:13.632Z');
-  test.strictEqual(+value, 1423759393632);
+  it('DateTimeOffset', () => {
+    let value = TYPE.DateTimeOffset.validate(null);
+    assert.strictEqual(value, null);
 
-  value = TYPE.DateTime2.validate('xxx');
-  test.ok(value instanceof TypeError);
+    let date = new Date();
+    value = TYPE.DateTimeOffset.validate(date);
+    assert.strictEqual(+value, +date);
 
-  test.done();
-};
+    value = TYPE.DateTimeOffset.validate('2015-02-12T16:43:13.632Z');
+    assert.strictEqual(+value, 1423759393632);
 
-exports.Time = function(test) {
-  var value = TYPE.Time.validate(null);
-  test.strictEqual(value, null);
+    value = TYPE.DateTimeOffset.validate('xxx');
+    assert.ok(value instanceof TypeError);
+  });
 
-  var date = new Date();
-  value = TYPE.Time.validate(date);
-  test.strictEqual(+value, +date);
+  it('Real', () => {
+    let value = TYPE.Real.validate(null);
+    assert.strictEqual(value, null);
 
-  value = TYPE.Time.validate('2015-02-12T16:43:13.632Z');
-  test.strictEqual(+value, 1423759393632);
+    value = TYPE.Real.validate(1516.61556);
+    assert.strictEqual(value, 1516.61556);
 
-  value = TYPE.Time.validate('xxx');
-  test.ok(value instanceof TypeError);
+    value = TYPE.Real.validate('1516.61556');
+    assert.strictEqual(value, 1516.61556);
 
-  test.done();
-};
+    value = TYPE.Real.validate('xxx');
+    assert.ok(value instanceof TypeError);
+  });
 
-exports.DateTimeOffset = function(test) {
-  var value = TYPE.DateTimeOffset.validate(null);
-  test.strictEqual(value, null);
+  it('Float', () => {
+    let value = TYPE.Float.validate(null);
+    assert.strictEqual(value, null);
 
-  var date = new Date();
-  value = TYPE.DateTimeOffset.validate(date);
-  test.strictEqual(+value, +date);
+    value = TYPE.Float.validate(1516.61556);
+    assert.strictEqual(value, 1516.61556);
 
-  value = TYPE.DateTimeOffset.validate('2015-02-12T16:43:13.632Z');
-  test.strictEqual(+value, 1423759393632);
+    value = TYPE.Float.validate('1516.61556');
+    assert.strictEqual(value, 1516.61556);
 
-  value = TYPE.DateTimeOffset.validate('xxx');
-  test.ok(value instanceof TypeError);
+    value = TYPE.Float.validate('xxx');
+    assert.ok(value instanceof TypeError);
+  });
 
-  test.done();
-};
+  it('Decimal', () => {
+    let value = TYPE.Decimal.validate(null);
+    assert.strictEqual(value, null);
 
-exports.Real = function(test) {
-  var value = TYPE.Real.validate(null);
-  test.strictEqual(value, null);
+    value = TYPE.Decimal.validate(1516.61556);
+    assert.strictEqual(value, 1516.61556);
 
-  value = TYPE.Real.validate(1516.61556);
-  test.strictEqual(value, 1516.61556);
+    value = TYPE.Decimal.validate('1516.61556');
+    assert.strictEqual(value, 1516.61556);
 
-  value = TYPE.Real.validate('1516.61556');
-  test.strictEqual(value, 1516.61556);
+    value = TYPE.Decimal.validate('xxx');
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.Real.validate('xxx');
-  test.ok(value instanceof TypeError);
+  it('Numeric', () => {
+    let value = TYPE.Numeric.validate(null);
+    assert.strictEqual(value, null);
 
-  test.done();
-};
+    value = TYPE.Numeric.validate(1516.61556);
+    assert.strictEqual(value, 1516.61556);
 
-exports.Float = function(test) {
-  var value = TYPE.Float.validate(null);
-  test.strictEqual(value, null);
+    value = TYPE.Numeric.validate('1516.61556');
+    assert.strictEqual(value, 1516.61556);
 
-  value = TYPE.Float.validate(1516.61556);
-  test.strictEqual(value, 1516.61556);
+    value = TYPE.Numeric.validate('xxx');
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.Float.validate('1516.61556');
-  test.strictEqual(value, 1516.61556);
+  it('Money', () => {
+    let value = TYPE.Money.validate(null);
+    assert.strictEqual(value, null);
 
-  value = TYPE.Float.validate('xxx');
-  test.ok(value instanceof TypeError);
+    value = TYPE.Money.validate(1516.61556);
+    assert.strictEqual(value, 1516.61556);
 
-  test.done();
-};
+    value = TYPE.Money.validate('1516.61556');
+    assert.strictEqual(value, 1516.61556);
 
-exports.Decimal = function(test) {
-  var value = TYPE.Decimal.validate(null);
-  test.strictEqual(value, null);
+    value = TYPE.Money.validate('xxx');
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.Decimal.validate(1516.61556);
-  test.strictEqual(value, 1516.61556);
+  it('SmallMoney', () => {
+    let value = TYPE.SmallMoney.validate(null);
+    assert.strictEqual(value, null);
 
-  value = TYPE.Decimal.validate('1516.61556');
-  test.strictEqual(value, 1516.61556);
+    value = TYPE.SmallMoney.validate(214748.3647);
+    assert.strictEqual(value, 214748.3647);
 
-  value = TYPE.Decimal.validate('xxx');
-  test.ok(value instanceof TypeError);
+    value = TYPE.SmallMoney.validate(214748.3648);
+    assert.ok(value instanceof TypeError);
+  });
 
-  test.done();
-};
+  it('Image', () => {
+    let value = TYPE.Image.validate(null);
+    assert.strictEqual(value, null);
 
-exports.Numeric = function(test) {
-  var value = TYPE.Numeric.validate(null);
-  test.strictEqual(value, null);
+    let buffer = Buffer.from([0x00, 0x01]);
+    value = TYPE.Image.validate(buffer);
+    assert.strictEqual(value, buffer);
 
-  value = TYPE.Numeric.validate(1516.61556);
-  test.strictEqual(value, 1516.61556);
+    value = TYPE.Image.validate({});
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.Numeric.validate('1516.61556');
-  test.strictEqual(value, 1516.61556);
+  it('Binary', () => {
+    let value = TYPE.Binary.validate(null);
+    assert.strictEqual(value, null);
 
-  value = TYPE.Numeric.validate('xxx');
-  test.ok(value instanceof TypeError);
+    let buffer = Buffer.from([0x00, 0x01]);
+    value = TYPE.Binary.validate(buffer);
+    assert.strictEqual(value, buffer);
 
-  test.done();
-};
+    value = TYPE.Binary.validate({});
+    assert.ok(value instanceof TypeError);
+  });
 
-exports.Money = function(test) {
-  var value = TYPE.Money.validate(null);
-  test.strictEqual(value, null);
+  it('VarBinary', () => {
+    let value = TYPE.VarBinary.validate(null);
+    assert.strictEqual(value, null);
 
-  value = TYPE.Money.validate(1516.61556);
-  test.strictEqual(value, 1516.61556);
+    let buffer = Buffer.from([0x00, 0x01]);
+    value = TYPE.VarBinary.validate(buffer);
+    assert.strictEqual(value, buffer);
 
-  value = TYPE.Money.validate('1516.61556');
-  test.strictEqual(value, 1516.61556);
+    value = TYPE.VarBinary.validate({});
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.Money.validate('xxx');
-  test.ok(value instanceof TypeError);
+  it('Text', () => {
+    let value = TYPE.Text.validate(null);
+    assert.strictEqual(value, null);
 
-  test.done();
-};
+    value = TYPE.Text.validate('asdf');
+    assert.strictEqual(value, 'asdf');
 
-exports.SmallMoney = function(test) {
-  var value = TYPE.SmallMoney.validate(null);
-  test.strictEqual(value, null);
+    value = TYPE.Text.validate(Buffer.from('asdf', 'utf8'));
+    assert.strictEqual(value, 'asdf');
 
-  value = TYPE.SmallMoney.validate(214748.3647);
-  test.strictEqual(value, 214748.3647);
+    value = TYPE.Text.validate({ toString: null });
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.SmallMoney.validate(214748.3648);
-  test.ok(value instanceof TypeError);
+  it('VarChar', () => {
+    let value = TYPE.VarChar.validate(null);
+    assert.strictEqual(value, null);
 
-  test.done();
-};
+    value = TYPE.VarChar.validate('asdf');
+    assert.strictEqual(value, 'asdf');
 
-exports.Image = function(test) {
-  var value = TYPE.Image.validate(null);
-  test.strictEqual(value, null);
+    value = TYPE.VarChar.validate(Buffer.from('asdf', 'utf8'));
+    assert.strictEqual(value, 'asdf');
 
-  var buffer = Buffer.from([0x00, 0x01]);
-  value = TYPE.Image.validate(buffer);
-  test.strictEqual(value, buffer);
+    value = TYPE.VarChar.validate({ toString: null });
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.Image.validate({});
-  test.ok(value instanceof TypeError);
+  it('NVarChar', () => {
+    let value = TYPE.NVarChar.validate(null);
+    assert.strictEqual(value, null);
 
-  test.done();
-};
+    value = TYPE.NVarChar.validate('asdf');
+    assert.strictEqual(value, 'asdf');
 
-exports.Binary = function(test) {
-  var value = TYPE.Binary.validate(null);
-  test.strictEqual(value, null);
+    value = TYPE.NVarChar.validate(Buffer.from('asdf', 'utf8'));
+    assert.strictEqual(value, 'asdf');
 
-  var buffer = Buffer.from([0x00, 0x01]);
-  value = TYPE.Binary.validate(buffer);
-  test.strictEqual(value, buffer);
+    value = TYPE.NVarChar.validate({ toString: null });
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.Binary.validate({});
-  test.ok(value instanceof TypeError);
+  it('Char', () => {
+    let value = TYPE.Char.validate(null);
+    assert.strictEqual(value, null);
 
-  test.done();
-};
+    value = TYPE.Char.validate('asdf');
+    assert.strictEqual(value, 'asdf');
 
-exports.VarBinary = function(test) {
-  var value = TYPE.VarBinary.validate(null);
-  test.strictEqual(value, null);
+    value = TYPE.Char.validate(Buffer.from('asdf', 'utf8'));
+    assert.strictEqual(value, 'asdf');
 
-  var buffer = Buffer.from([0x00, 0x01]);
-  value = TYPE.VarBinary.validate(buffer);
-  test.strictEqual(value, buffer);
+    value = TYPE.Char.validate({ toString: null });
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.VarBinary.validate({});
-  test.ok(value instanceof TypeError);
+  it('NChar', () => {
+    let value = TYPE.NChar.validate(null);
+    assert.strictEqual(value, null);
 
-  test.done();
-};
+    value = TYPE.NChar.validate('asdf');
+    assert.strictEqual(value, 'asdf');
 
-exports.Text = function(test) {
-  var value = TYPE.Text.validate(null);
-  test.strictEqual(value, null);
+    value = TYPE.NChar.validate(Buffer.from('asdf', 'utf8'));
+    assert.strictEqual(value, 'asdf');
 
-  value = TYPE.Text.validate('asdf');
-  test.strictEqual(value, 'asdf');
+    value = TYPE.NChar.validate({ toString: null });
+    assert.ok(value instanceof TypeError);
+  });
 
-  value = TYPE.Text.validate(Buffer.from('asdf', 'utf8'));
-  test.strictEqual(value, 'asdf');
+  it('TVP', () => {
+    let value = TYPE.TVP.validate(null);
+    assert.strictEqual(value, null);
 
-  value = TYPE.Text.validate({ toString: null });
-  test.ok(value instanceof TypeError);
+    let table = { columns: [], rows: [] };
+    value = TYPE.TVP.validate(table);
+    assert.strictEqual(value, table);
 
-  test.done();
-};
-
-exports.VarChar = function(test) {
-  var value = TYPE.VarChar.validate(null);
-  test.strictEqual(value, null);
-
-  value = TYPE.VarChar.validate('asdf');
-  test.strictEqual(value, 'asdf');
-
-  value = TYPE.VarChar.validate(Buffer.from('asdf', 'utf8'));
-  test.strictEqual(value, 'asdf');
-
-  value = TYPE.VarChar.validate({ toString: null });
-  test.ok(value instanceof TypeError);
-
-  test.done();
-};
-
-exports.NVarChar = function(test) {
-  var value = TYPE.NVarChar.validate(null);
-  test.strictEqual(value, null);
-
-  value = TYPE.NVarChar.validate('asdf');
-  test.strictEqual(value, 'asdf');
-
-  value = TYPE.NVarChar.validate(Buffer.from('asdf', 'utf8'));
-  test.strictEqual(value, 'asdf');
-
-  value = TYPE.NVarChar.validate({ toString: null });
-  test.ok(value instanceof TypeError);
-
-  test.done();
-};
-
-exports.Char = function(test) {
-  var value = TYPE.Char.validate(null);
-  test.strictEqual(value, null);
-
-  value = TYPE.Char.validate('asdf');
-  test.strictEqual(value, 'asdf');
-
-  value = TYPE.Char.validate(Buffer.from('asdf', 'utf8'));
-  test.strictEqual(value, 'asdf');
-
-  value = TYPE.Char.validate({ toString: null });
-  test.ok(value instanceof TypeError);
-
-  test.done();
-};
-
-exports.NChar = function(test) {
-  var value = TYPE.NChar.validate(null);
-  test.strictEqual(value, null);
-
-  value = TYPE.NChar.validate('asdf');
-  test.strictEqual(value, 'asdf');
-
-  value = TYPE.NChar.validate(Buffer.from('asdf', 'utf8'));
-  test.strictEqual(value, 'asdf');
-
-  value = TYPE.NChar.validate({ toString: null });
-  test.ok(value instanceof TypeError);
-
-  test.done();
-};
-
-exports.TVP = function(test) {
-  var value = TYPE.TVP.validate(null);
-  test.strictEqual(value, null);
-
-  var table = { columns: [], rows: [] };
-  value = TYPE.TVP.validate(table);
-  test.strictEqual(value, table);
-
-  value = TYPE.TVP.validate({});
-  test.ok(value instanceof TypeError);
-
-  test.done();
-};
+    value = TYPE.TVP.validate({});
+    assert.ok(value instanceof TypeError);
+  });
+});
