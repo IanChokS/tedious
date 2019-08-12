@@ -16,22 +16,19 @@ function assertPayload(payload, encryptionString) {
 }
 
 describe('prelogin-payload-assert', function() {
-  it('should not encrypt', function(done) {
+  it('should not encrypt', function() {
     const payload = new PreloginPayload();
     assertPayload(payload, 'NOT_SUP');
-    done();
   });
 
-  it('should encrypt', function(done) {
+  it('should encrypt', function() {
     const payload = new PreloginPayload({ encrypt: true });
     assertPayload(payload, 'ON');
-    done();
   });
 
-  it('should create from buffer', function(done) {
+  it('should create from buffer', function() {
     const payload = new PreloginPayload();
     new PreloginPayload(payload.data);
     assertPayload(payload, 'NOT_SUP');
-    done();
   });
 });
