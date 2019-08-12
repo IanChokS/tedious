@@ -33,53 +33,49 @@ function sendStub(buffer, offset, length, port, ipAddress) {
   process.nextTick(emitEvent.bind(this));
 }
 
-function sendToIpCommonTestSetup(ipAddress, udpVersion, sendResult) {
-  // Create socket exactly like the Sender class would create while stubbing
-  // some methods for unit testing.
-  this.testSocket = Dgram.createSocket(udpVersion);
-  this.socketSendStub = sinon.stub(this.testSocket, 'send').callsFake(sendStub);
-  this.socketCloseSpy = sinon.spy(this.testSocket, 'close');
-
-  // This allows the emitEvent method to emit the right event for the given test.
-  this.testSocket.sendResult = sendResult;
-
-  // Stub createSocket method to return a socket created exactly like the
-  // method would but with a few methods stubbed out above.
-  this.createSocketStub = sinon.stub(Dgram, 'createSocket');
-  this.createSocketStub.withArgs(udpVersion).returns(this.testSocket);
-
-  this.sender = new Sender(ipAddress, anyPort, anyRequest);
-}
-
-function sendToIpCommonTestValidation(ipAddress) {
-  assert.isOk(this.createSocketStub.calledOnce);
-  assert.isOk(
-    this.socketSendStub.withArgs(
-      anyRequest,
-      0,
-      anyRequest.length,
-      anyPort,
-      ipAddress
-    ).calledOnce
-  );
-}
-
 // TODO: Refactor functions above ^^^^^^^
 
 describe('Sender send to IP address', function() {
-  const glob = {};
-
-  it('should tear down', function(done) {
-    sinon.restore();
-    done();
-  });
-
   describe('Send', function() {
+    let glob;
+
+    function sendToIpCommonTestSetup(ipAddress, udpVersion, sendResult) {
+      // Create socket exactly like the Sender class would create while stubbing
+      // some methods for unit testing.
+      this.testSocket = Dgram.createSocket(udpVersion);
+      this.socketSendStub = sinon.stub(this.testSocket, 'send').callsFake(sendStub);
+      this.socketCloseSpy = sinon.spy(this.testSocket, 'close');
+
+      // This allows the emitEvent method to emit the right event for the given test.
+      this.testSocket.sendResult = sendResult;
+
+      // Stub createSocket method to return a socket created exactly like the
+      // method would but with a few methods stubbed out above.
+      this.createSocketStub = sinon.stub(Dgram, 'createSocket');
+      this.createSocketStub.withArgs(udpVersion).returns(this.testSocket);
+
+      this.sender = new Sender(ipAddress, anyPort, anyRequest);
+    }
+
+    function sendToIpCommonTestValidation(ipAddress) {
+      assert.isOk(this.createSocketStub.calledOnce);
+      assert.isOk(
+        this.socketSendStub.withArgs(
+          anyRequest,
+          0,
+          anyRequest.length,
+          anyPort,
+          ipAddress
+        ).calledOnce
+      );
+    }
+
+    beforeEach(function() {
+      glob = {};
+    });
 
     afterEach(function() {
-      glob.socketSendStub.restore();
-      glob.socketCloseSpy.restore();
-      glob.createSocketStub.restore();
+      sinon.restore();
     });
 
     it('should send to IPv4', function(done) {
@@ -177,29 +173,22 @@ function sendToHostCommonTestSetup(lookupError) {
 }
 
 describe('Sender send to hostnam', function() {
-  const glob = {};
-  it('should setUp', function(done) {
-    // Set of IP addresses to be returned by stubbed out lookupAll method.
-    glob.addresses = [
-      { address: '127.0.0.2' },
-      { address: '2002:20:0:0:0:0:1:3' },
-      { address: '127.0.0.4' }
-    ];
-
-    done();
-  });
-
-  it('should tearDown', function(done) {
-    sinon.restore();
-    done();
-  });
-
   describe('Send', function() {
+    let glob;
+
+    beforeEach(function() {
+      // Set of IP addresses to be returned by stubbed out lookupAll method.
+      glob = {
+        addresses: [
+          { address: '127.0.0.2' },
+          { address: '2002:20:0:0:0:0:1:3' },
+          { address: '127.0.0.4' }
+        ]
+      };
+    });
+
     afterEach(function() {
-      glob.strategySendStub.restore();
-      glob.strategyCancelStub.restore();
-      glob.lookupAllStub.restore();
-      glob.createStrategyStub.restore();
+      sinon.restore();
     });
 
     it('should send basic', function(done) {
@@ -274,74 +263,63 @@ describe('Sender send to hostnam', function() {
 
 });
 
-function commonStrategyTestSetup() {
-  // IP addresses returned by DNS reverse lookup and passed to the Strategy.
-  this.testData = [
-    { address: '1.2.3.4', udpVersion: udpIpv4 },
-    { address: '2002:20:0:0:0:0:1:3', udpVersion: udpIpv6 },
-    { address: '2002:30:0:0:0:0:2:4', udpVersion: udpIpv6 },
-    { address: '5.6.7.8', udpVersion: udpIpv4 }
-  ];
-
-  // Create sockets for IPv4 and IPv6 with send and close stubbed out to
-  // prevent network activity.
-  this.testSockets = {};
-  this.testSockets[udpIpv4] = Dgram.createSocket(udpIpv4);
-  this.testSockets[udpIpv6] = Dgram.createSocket(udpIpv6);
-
-  for (const key in this.testSockets) {
-    this.testSockets[key].socketSendStub = sinon.stub(this.testSockets[key], 'send').callsFake(sendStub);
-    this.testSockets[key].socketCloseSpy = sinon.spy(this.testSockets[key], 'close');
-
-    // This allows emitEvent method to fire an 'error' or 'message' event appropriately.
-    // A given test may overwrite this value for specific sockets to test different
-    // scenarios.
-    this.testSockets[key].sendResult = sendResultSuccess;
-  }
-
-  for (let j = 0; j < this.testData.length; j++) {
-    this.testData[j].testSocket = this.testSockets[this.testData[j].udpVersion];
-  }
-
-  // Stub createSocket method to returns a socket created exactly like the
-  // method would but with a few methods stubbed out above.
-  this.createSocketStub = sinon.stub(Dgram, 'createSocket');
-  this.createSocketStub.withArgs(udpIpv4).returns(this.testSockets[udpIpv4]);
-  this.createSocketStub.withArgs(udpIpv6).returns(this.testSockets[udpIpv6]);
-
-  this.parallelSendStrategy = new ParallelSendStrategy(
-    this.testData,
-    anyPort,
-    anyRequest
-  );
-}
-
-
-function commonStrategyTestValidation(done) {
-  for (const key in this.testSockets) {
-    assert.strictEqual(this.testSockets[key].socketSendStub.callCount, 2);
-    assert.strictEqual(this.testSockets[key].socketCloseSpy.callCount, 1);
-  }
-
-  assert.strictEqual(this.createSocketStub.callCount, 2);
-
-  done();
-}
-
 describe('Parallel Send Strategy', function() {
-  let glob;
-  it('should setUp', function(done) {
-    glob = {};
-    commonStrategyTestSetup.call(glob);
-    done();
-  });
-
-  it('should tearDown', function(done) {
-    sinon.restore();
-    done();
-  });
-
   describe('Send', function() {
+    let glob;
+
+    function commonStrategyTestSetup() {
+      // IP addresses returned by DNS reverse lookup and passed to the Strategy.
+      this.testData = [
+        { address: '1.2.3.4', udpVersion: udpIpv4 },
+        { address: '2002:20:0:0:0:0:1:3', udpVersion: udpIpv6 },
+        { address: '2002:30:0:0:0:0:2:4', udpVersion: udpIpv6 },
+        { address: '5.6.7.8', udpVersion: udpIpv4 }
+      ];
+
+      // Create sockets for IPv4 and IPv6 with send and close stubbed out to
+      // prevent network activity.
+      this.testSockets = {};
+      this.testSockets[udpIpv4] = Dgram.createSocket(udpIpv4);
+      this.testSockets[udpIpv6] = Dgram.createSocket(udpIpv6);
+
+      for (const key in this.testSockets) {
+        this.testSockets[key].socketSendStub = sinon.stub(this.testSockets[key], 'send').callsFake(sendStub);
+        this.testSockets[key].socketCloseSpy = sinon.spy(this.testSockets[key], 'close');
+
+        // This allows emitEvent method to fire an 'error' or 'message' event appropriately.
+        // A given test may overwrite this value for specific sockets to test different
+        // scenarios.
+        this.testSockets[key].sendResult = sendResultSuccess;
+      }
+
+      for (let j = 0; j < this.testData.length; j++) {
+        this.testData[j].testSocket = this.testSockets[this.testData[j].udpVersion];
+      }
+
+      // Stub createSocket method to returns a socket created exactly like the
+      // method would but with a few methods stubbed out above.
+      this.createSocketStub = sinon.stub(Dgram, 'createSocket');
+      this.createSocketStub.withArgs(udpIpv4).returns(this.testSockets[udpIpv4]);
+      this.createSocketStub.withArgs(udpIpv6).returns(this.testSockets[udpIpv6]);
+
+      this.parallelSendStrategy = new ParallelSendStrategy(
+        this.testData,
+        anyPort,
+        anyRequest
+      );
+    }
+
+    function commonStrategyTestValidation(done) {
+      for (const key in this.testSockets) {
+        assert.strictEqual(this.testSockets[key].socketSendStub.callCount, 2);
+        assert.strictEqual(this.testSockets[key].socketCloseSpy.callCount, 1);
+      }
+
+      assert.strictEqual(this.createSocketStub.callCount, 2);
+
+      done();
+    }
+
     beforeEach(function() {
       glob = {};
       commonStrategyTestSetup.call(glob);
