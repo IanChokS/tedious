@@ -47,7 +47,6 @@
     "depd": "^2.0.0",
     "iconv-lite": "^0.4.23",
     "native-duplexpair": "^1.0.0",
-    "nyc": "^14.1.1",
     "punycode": "^2.1.0",
     "readable-stream": "^3.4.0",
     "sprintf-js": "^1.1.2"
@@ -69,6 +68,7 @@
     "eslint": "^5.16.0",
     "mitm": "^1.7.0",
     "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
     "rimraf": "^2.6.3",
     "semantic-release": "^15.13.12",
     "sinon": "^7.3.2",
